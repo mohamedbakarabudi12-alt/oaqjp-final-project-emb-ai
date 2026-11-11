@@ -1,9 +1,15 @@
+"""Detect emotions in text using the Watson NLP service."""
+
 import json
 import requests
 
 
 def emotion_detector(text_to_analyze):
-    url = 'https://sn-watson-emotion.labs.skills.network/v1/watson.runtime.nlp.v1/NlpService/EmotionPredict'
+    """Return emotion scores and the dominant emotion for the input text."""
+    url = (
+        'https://sn-watson-emotion.labs.skills.network/'
+        'v1/watson.runtime.nlp.v1/NlpService/EmotionPredict'
+    )
     headers = {
         "grpc-metadata-mm-model-id": "emotion_aggregated-workflow_lang_en_stock"
     }
@@ -13,7 +19,7 @@ def emotion_detector(text_to_analyze):
         }
     }
 
-    response = requests.post(url, json=payload, headers=headers)
+    response = requests.post(url, json=payload, headers=headers, timeout=30)
     if response.status_code == 400:
         return {
             'anger': None,
@@ -42,4 +48,3 @@ def emotion_detector(text_to_analyze):
         'sadness': sadness_score,
         'dominant_emotion': dominant_emotion
     }
-
